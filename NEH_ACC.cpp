@@ -400,9 +400,9 @@ int main(){
       #endif // DEBUG
   }
 
-  cout<<endl<<"Kolejnosc zadan:"<<endl<<kolejkaZad<<endl<<"Cmax: ";
-  cout<< kolejkaZad[0].LC[0]<<endl;
-  cout<< kolejkaZad[zadania-1].PC[maszyny-1]<<endl;
+  cout<<endl<<"Kolejnosc zadan:"<<endl<<kolejkaZad<<endl;
+  cout<<"CmaxL: "<< kolejkaZad[0].LC[0]                 <<endl;
+  cout<<"CmaxP: "<< kolejkaZad[zadania-1].PC[maszyny-1] <<endl;
   cin.get();
   cin.get();
   return 0;
