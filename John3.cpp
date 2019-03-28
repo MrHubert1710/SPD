@@ -4,6 +4,7 @@
 #include <string>
 #include <list>
 #include <algorithm>
+#include <sys/time.h>
 using namespace std;
 
 #define DEBUG 0
@@ -16,11 +17,15 @@ return;
 std::ostream& operator<<(std::ostream& ostr, const std::list<int>& list)
 {
     for (auto &i : list) {
-        ostr << " " <<setw(4)<< i;
+        ostr << " " <<setw(3)<< i;
     }
     return ostr;
 }
 
+float timedifference_msec(struct timeval t0, struct timeval t1)
+{
+    return (t1.tv_sec - t0.tv_sec) * 1000.0f + (t1.tv_usec - t0.tv_usec) / 1000.0f;
+}
 
 
 
@@ -31,6 +36,8 @@ int main(int argc, char* argv[])
   string nazwa_pliku;
   ifstream plik;
   ofstream plik_danych;
+  struct timeval start, stop;
+  double czas;
   int zadania=0;
   int maszyny=0;
   if(argc==1){
@@ -44,11 +51,13 @@ int main(int argc, char* argv[])
     }
   }
   nazwa_pliku=nazwa;
-  nazwa="Debug\\"+nazwa;
+  nazwa="Dane/"+nazwa;
   plik.open(nazwa);
   plik>>zadania;
   plik>>maszyny;
   cout<<zadania<<" "<<maszyny<<endl;
+
+  gettimeofday(&start, NULL);
   int  tablica[zadania][maszyny];
   for(int i=0;i<zadania;i++){
     for(int j=0;j<maszyny;j++){
@@ -94,6 +103,7 @@ int main(int argc, char* argv[])
 
   list<int> A;
   list<int> B;
+  list<int> C;
   int least;
   int least_oposite;
   int n_least;
@@ -133,7 +143,10 @@ int main(int argc, char* argv[])
   cout<<B<<endl;
   #endif // DEBUG
   A.insert(A.end(), B.begin(), B.end());
-  cout<<A<<endl<<endl;
+  C=A;
+  if(argc==1)
+    cout<<A<<endl<<endl;
+
   int  gantt[zadania][maszyny];
   int tmp_zad;
   for(int i=0;i<zadania;i++){
@@ -199,10 +212,12 @@ int main(int argc, char* argv[])
     cin.get();
   #endif // DEBUG
   }
+  gettimeofday(&stop, NULL);
+  czas = timedifference_msec(start, stop);
   if(argc<3){
     cout<<"Cmax dla algorymu Johnsona to: "<<Cmax;
   }else{
-    plik_danych<<setw(4)<<atoi(nazwa_pliku.c_str())<<" "<<setw(11)<<setprecision(6)<<fixed<<czas<<" "<<setw(6)<<Cmax<<"    "<<A;
+    plik_danych<<setw(4)<<atoi(nazwa_pliku.c_str())<<" "<<setw(11)<<setprecision(6)<<fixed<<czas<<" "<<setw(6)<<Cmax<<" "<<setw(6)<<Cmax<<"    "<<C<<endl;
   }
   return 0;
 }
