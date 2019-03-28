@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 #include <fstream>
 #include <string>
 #include <list>
@@ -15,22 +16,35 @@ return;
 std::ostream& operator<<(std::ostream& ostr, const std::list<int>& list)
 {
     for (auto &i : list) {
-        ostr << " " << i;
+        ostr << " " <<setw(4)<< i;
     }
     return ostr;
 }
 
-string nazwa;
-ifstream plik;
-int zadania=0;
-int maszyny=0;
 
 
 
-int main()
+int main(int argc, char* argv[])
 {
-  cout<<"Podaj nazwe pliku:";
-  cin>>nazwa;
+  string nazwa;
+  string nazwa_danych;
+  string nazwa_pliku;
+  ifstream plik;
+  ofstream plik_danych;
+  int zadania=0;
+  int maszyny=0;
+  if(argc==1){
+    cout<<"Podaj nazwe pliku:";
+    cin>>nazwa;
+  }else{
+    nazwa=(string)argv[1];
+    if(argc>2){
+      nazwa_danych=(string)argv[2];
+      plik_danych.open(nazwa_danych,ios::app);
+    }
+  }
+  nazwa_pliku=nazwa;
+  nazwa="Debug\\"+nazwa;
   plik.open(nazwa);
   plik>>zadania;
   plik>>maszyny;
@@ -39,9 +53,13 @@ int main()
   for(int i=0;i<zadania;i++){
     for(int j=0;j<maszyny;j++){
       plik >> tablica[i][j];
+      #if DEBUG
       cout<< tablica[i][j]<<" ";
+      #endif // DEBUG
     }
+     #if DEBUG
     cout<<endl;
+      #endif // DEBUG
   }
   int wirtualne[zadania][2];
   int IleElem=maszyny/2;
@@ -181,6 +199,10 @@ int main()
     cin.get();
   #endif // DEBUG
   }
-  cout<<"Cmax dla algorymu Johnsona to: "<<Cmax;
+  if(argc<3){
+    cout<<"Cmax dla algorymu Johnsona to: "<<Cmax;
+  }else{
+    plik_danych<<setw(4)<<atoi(nazwa_pliku.c_str())<<" "<<setw(11)<<setprecision(6)<<fixed<<czas<<" "<<setw(6)<<Cmax<<"    "<<A;
+  }
   return 0;
 }
