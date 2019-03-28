@@ -186,8 +186,6 @@ void UpdateC(deque<ZadanieMaszyn> &lista,int pos){
         }
       }
     }
-
-
  }
   return;
 }
@@ -423,13 +421,13 @@ int main(int argc,char* argv[]){
 
   if(argc>2){
     plik_danych.open(nazwa_danych,ios::app);
-    plik_danych<<setw(4)<<atoi(nazwa_pliku.c_str())<<" "<<czas<<" "<<setw(9)<<kolejkaZad[0].LC[0]<<" "<<setw(9)<<kolejkaZad[zadania-1].PC[maszyny-1]<<"    "<<kolejkaZad;
+    plik_danych<<setw(4)<<atoi(nazwa_pliku.c_str())<<" "<<setw(11)<<setprecision(6)<<fixed<<czas<<" "<<setw(6)<<kolejkaZad[0].LC[0]<<" "<<setw(6)<<kolejkaZad[zadania-1].PC[maszyny-1]<<"    "<<kolejkaZad;
 
   }else{
     cout<<endl<<"Kolejnosc zadan:"<<endl<<kolejkaZad<<endl;
     cout<<"CmaxL: "<< kolejkaZad[0].LC[0]                 <<endl;
     cout<<"CmaxP: "<< kolejkaZad[zadania-1].PC[maszyny-1] <<endl;
-    cout<<"Czas: "<< setprecision(9) << czas <<endl;
+    cout<<"Czas: "<< setprecision(6) << czas <<endl;
   }
   if(argc==1){
     cin.get();
