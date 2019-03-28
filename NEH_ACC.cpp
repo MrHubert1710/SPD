@@ -282,7 +282,7 @@ int main(int argc,char* argv[]){
       nazwa_danych=(string)argv[2];
   }
   nazwa_pliku=nazwa;
-  nazwa="Dane\\"+nazwa;
+  nazwa="Dane/"+nazwa;
   plik.open(nazwa);
 
   plik>>zadania;
@@ -423,7 +423,7 @@ int main(int argc,char* argv[]){
 
   if(argc>2){
     plik_danych.open(nazwa_danych,ios::app);
-    plik_danych<<setw(4)<<atoi(nazwa_pliku.c_str())<<" "<< setprecision(9)<<setw(10)<<czas<<" "<<setw(9)<<kolejkaZad[0].LC[0]<<" "<<setw(9)<<kolejkaZad[zadania-1].PC[maszyny-1]<<"    "<<kolejkaZad;
+    plik_danych<<setw(4)<<atoi(nazwa_pliku.c_str())<<" "<<czas<<" "<<setw(9)<<kolejkaZad[0].LC[0]<<" "<<setw(9)<<kolejkaZad[zadania-1].PC[maszyny-1]<<"    "<<kolejkaZad;
 
   }else{
     cout<<endl<<"Kolejnosc zadan:"<<endl<<kolejkaZad<<endl;
