@@ -5,7 +5,7 @@
 #include <iomanip>
 #include <vector>
 #include <deque>
-
+#include <sys/time.h>
 #define DEBUG_INPUT 0
 #define DEBUG 0
 
@@ -34,7 +34,7 @@ std::ostream& operator<<(std::ostream& ostr, const std::deque<ZadanieMaszyn>& li
     return ostr;
   #else
     for (auto &i : list) {
-      ostr << " " <<i.ID;
+      ostr << " " <<setw(3)<<i.ID;
     }
     ostr<<endl;
   #endif // DEBUG
@@ -254,18 +254,35 @@ int CheckC(deque<ZadanieMaszyn> &lista,ZadanieMaszyn src,int pos){
   }
   return -2;
 }
+float timedifference_msec(struct timeval t0, struct timeval t1)
+{
+    return (t1.tv_sec - t0.tv_sec) * 1000.0f + (t1.tv_usec - t0.tv_usec) / 1000.0f;
+}
 
-int main(){
+
+int main(int argc,char* argv[]){
 
 
   string nazwa;
+  string nazwa_pliku;
+  string nazwa_danych;
   ifstream plik;
+  ofstream plik_danych;
   int zadania=0;
   int maszyny=0;
   int Cmax=2147483647;
-  cout<<"Podaj nazwe pliku:";
-  cin>>nazwa;
-
+  struct timeval start, stop;
+  double czas=0;
+  if(argc==1){
+    cout<<"Podaj nazwe pliku:";
+    cin>>nazwa;
+  }else{
+    nazwa=(string)argv[1];
+    if(argc>2)
+      nazwa_danych=(string)argv[2];
+  }
+  nazwa_pliku=nazwa;
+  nazwa="Dane\\"+nazwa;
   plik.open(nazwa);
 
   plik>>zadania;
@@ -273,6 +290,7 @@ int main(){
 
   cout<<"Zadania: "<<zadania<<endl<<"Maszyny: "<<maszyny<<endl;
 
+  gettimeofday(&start, NULL);
   //Definicja
   int **tablica;
 
@@ -304,6 +322,7 @@ int main(){
       cout<<endl;
     #endif // DEBUG_INPUT
   }
+
   vector<Zadanie> lZadan;
   Zadanie tmp;
   for(int i=1;i<=zadania;++i){
@@ -399,11 +418,22 @@ int main(){
 
       #endif // DEBUG
   }
+  gettimeofday(&stop, NULL);
+  czas = timedifference_msec(start, stop);
 
-  cout<<endl<<"Kolejnosc zadan:"<<endl<<kolejkaZad<<endl;
-  cout<<"CmaxL: "<< kolejkaZad[0].LC[0]                 <<endl;
-  cout<<"CmaxP: "<< kolejkaZad[zadania-1].PC[maszyny-1] <<endl;
-  cin.get();
-  cin.get();
+  if(argc>2){
+    plik_danych.open(nazwa_danych,ios::app);
+    plik_danych<<setw(4)<<atoi(nazwa_pliku.c_str())<<" "<< setprecision(9)<<setw(10)<<czas<<" "<<setw(9)<<kolejkaZad[0].LC[0]<<" "<<setw(9)<<kolejkaZad[zadania-1].PC[maszyny-1]<<"    "<<kolejkaZad;
+
+  }else{
+    cout<<endl<<"Kolejnosc zadan:"<<endl<<kolejkaZad<<endl;
+    cout<<"CmaxL: "<< kolejkaZad[0].LC[0]                 <<endl;
+    cout<<"CmaxP: "<< kolejkaZad[zadania-1].PC[maszyny-1] <<endl;
+    cout<<"Czas: "<< setprecision(9) << czas <<endl;
+  }
+  if(argc==1){
+    cin.get();
+    cin.get();
+  }
   return 0;
 }
