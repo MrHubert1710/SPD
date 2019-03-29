@@ -464,7 +464,8 @@ int main(int argc,char* argv[]){
 
       UpdateC(kolejkaZad,minPos); //Odswiez LC i PC zaczynajac od ostatnio wstawionego elementu
 
-
+      //Sprawdz sciezke krytyczna i sprawdz permutacje dla najdluzszego zadania na sciezce krytycznej
+      //{
       SciezkaKryt.clear();
       tmpKryt.Kolumna=0;
       tmpKryt.Wiersz=0;
@@ -536,6 +537,9 @@ int main(int argc,char* argv[]){
         kolejkaZad.insert(it,tymczas);  //Wskazuje miejsce gdzie nalezy wstawic zadanie
       }
       UpdateC(kolejkaZad,minPos);
+      //}
+
+
       //}
     }
 
