@@ -1,11 +1,11 @@
 #!/bin/bash
 for z in $(seq 1 10 111)
 do
-    for i in $(LANG=en_US seq 0.9 0.005 0.995)
+    for i in $(LANG=en_US seq 0.8 0.01 0.99)
     do
-	for j in $(seq 100 100 2000)
+	for j in $(seq 1000 1000 20000)
 	do
-	    ./Wyzarzanie $z TEST/test$z $i $j 0.1
+	    ./WyzarzanieIns $z TEST_INS_BR/test$z $i $j 1
 	done
     done
 done

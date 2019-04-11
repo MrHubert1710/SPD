@@ -516,8 +516,8 @@ int main(int argc,char* argv[]){
         cout<<"Losuj perm ";
         usleep(50000);
       #endif // DEBUG_HEAT
-      lista_new=Swap_Zad(kolejkaZad,swap_a,swap_b);
-      //lista_new=Insert_Zad(kolejkaZad,swap_a,swap_b);
+	//lista_new=Swap_Zad(kolejkaZad,swap_a,swap_b);
+      lista_new=Insert_Zad(kolejkaZad,swap_a,swap_b);
       Cnew=lista_new[0].LC[0];
     }while(Cnew==Cmax);
 
