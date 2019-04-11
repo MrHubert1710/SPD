@@ -455,6 +455,7 @@ int main(int argc,char* argv[]){
     cout<<"CmaxP: "<< kolejkaZad[zadania-1].PC[maszyny-1] <<endl;
     cout<<"Czas NEH: "<< setprecision(6) << czas <<endl;
   }
+// -------- Wyrzazanie --------
 
   double mi;
   double heat,heat_start;
