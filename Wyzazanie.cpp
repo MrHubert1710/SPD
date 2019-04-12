@@ -19,12 +19,14 @@ struct Zadanie{
   int ID;
   int Wartosc;
 };
+
 struct ZadanieMaszyn{
   int ID;
   deque<int> Wartosc;
   deque<int> LC;
   deque<int> PC;
 };
+
 std::ostream& operator<<(std::ostream& ostr, const std::deque<ZadanieMaszyn>& list){
 
    #if DEBUG
@@ -50,9 +52,11 @@ void ClearZadM(ZadanieMaszyn &Src){
   Src.PC.clear();
   return;
 }
+
 bool operator>(const Zadanie& A,const Zadanie& B){
   return(A.Wartosc>B.Wartosc);
 }
+
 void UpdateC(deque<ZadanieMaszyn> &lista,int pos){
  if(lista.size()==0){
     return;
@@ -192,6 +196,7 @@ void UpdateC(deque<ZadanieMaszyn> &lista,int pos){
  }
   return;
 }
+
 deque<ZadanieMaszyn> Swap_Zad(deque<ZadanieMaszyn> lista,int a, int b){
   ZadanieMaszyn tmp=lista[a];
   lista[a]=lista[b];
@@ -199,6 +204,7 @@ deque<ZadanieMaszyn> Swap_Zad(deque<ZadanieMaszyn> lista,int a, int b){
   UpdateC(lista,lista.size()-1);
   return lista;
 }
+
 deque<ZadanieMaszyn> Insert_Zad(deque<ZadanieMaszyn> lista,int a, int b){
   ZadanieMaszyn tmp=lista[a];
   lista.erase(lista.begin()+a);
@@ -269,9 +275,11 @@ int CheckC(deque<ZadanieMaszyn> &lista,ZadanieMaszyn src,int pos){
   }
   return -2;
 }
+
 float timedifference_msec(struct timeval t0, struct timeval t1){
     return (t1.tv_sec - t0.tv_sec) * 1000.0f + (t1.tv_usec - t0.tv_usec) / 1000.0f;
 }
+
 double accept_prob(int Cmax, int Cnew, double heat){
   if(Cnew<Cmax){
     return 2;
@@ -285,7 +293,6 @@ double accept_prob(int Cmax, int Cnew, double heat){
 }
 
 int main(int argc,char* argv[]){
-
 
   string nazwa;
   string nazwa_pliku;
@@ -455,16 +462,20 @@ int main(int argc,char* argv[]){
     cout<<"CmaxP: "<< kolejkaZad[zadania-1].PC[maszyny-1] <<endl;
     cout<<"Czas NEH: "<< setprecision(6) << czas <<endl;
   }
+
 // -------- Wyrzazanie --------
 
   double mi;
   double heat,heat_start;
   double heat_stop;
+
   int dlugosc = kolejkaZad.size()-1;
   Cmax=kolejkaZad[0].LC[0];
+
   int Cnew=-1;
   int swap_a, swap_b;
   int iteracje=0;
+
   deque<ZadanieMaszyn> lista_new;
 
   default_random_engine gen;
@@ -486,7 +497,6 @@ int main(int argc,char* argv[]){
     cin>>heat;
     cout<<"Podaj temp. stopu:";
     cin>>heat_stop;
-
   }else{
     cout<<"Podaj wspolczynnik wyzarzania:";
     cin>>mi;
@@ -495,7 +505,7 @@ int main(int argc,char* argv[]){
     cout<<"Podaj temp. stopu:";
     cin>>heat_stop;
   }
-  heat_start=heat;
+  heat_start = heat;
   gettimeofday(&start, NULL);
   while(heat>heat_stop){
       #if DEBUG_HEAT
