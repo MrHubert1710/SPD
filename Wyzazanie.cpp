@@ -293,7 +293,7 @@ double accept_prob(int Cmax, int Cnew, double heat){
 }
 
 int main(int argc,char* argv[]){
-
+#if 1
   string nazwa;
   string nazwa_pliku;
   string nazwa_danych;
@@ -462,7 +462,8 @@ int main(int argc,char* argv[]){
     cout<<"CmaxP: "<< kolejkaZad[zadania-1].PC[maszyny-1] <<endl;
     cout<<"Czas NEH: "<< setprecision(6) << czas <<endl;
   }
-
+#endif
+//}
 // -------- Wyrzazanie --------
 
   double mi;
@@ -505,8 +506,11 @@ int main(int argc,char* argv[]){
     cout<<"Podaj temp. stopu:";
     cin>>heat_stop;
   }
+
   heat_start = heat;
+
   gettimeofday(&start, NULL);
+
   while(heat>heat_stop){
       #if DEBUG_HEAT
       cout<<"Start ";
@@ -522,12 +526,10 @@ int main(int argc,char* argv[]){
         #endif // DEBUG_HEAT
       }while(swap_b==swap_a);
 
-
       #if DEBUG_HEAT
         cout<<"Losuj perm ";
         usleep(50000);
       #endif // DEBUG_HEAT
-	//lista_new=Swap_Zad(kolejkaZad,swap_a,swap_b);
       lista_new=Insert_Zad(kolejkaZad,swap_a,swap_b);
       Cnew=lista_new[0].LC[0];
     }while(Cnew==Cmax);
@@ -540,13 +542,16 @@ int main(int argc,char* argv[]){
       kolejkaZad=lista_new;
       Cmax=Cnew;
     }
+
     heat*=mi;
     ++iteracje;
-    #if DEBUG_HEAT
+
+  #if DEBUG_HEAT
       cout<<endl<<"Iteracja: "<<iteracje<<", Aktualny Cmax = "<< Cmax <<" Temp = " << heat <<"Mi = "<< mi << endl;
       cout<<endl<<"Kolejnosc zadan:"<<endl<<kolejkaZad<<endl;
     #endif // DEBUG_HEAT
   }
+
   gettimeofday(&stop, NULL);
   czas = timedifference_msec(start, stop);
 
@@ -557,8 +562,6 @@ int main(int argc,char* argv[]){
     cout<<endl<<"Kolejnosc zadan:"<<endl<<kolejkaZad<<endl;
     cout<<endl<<"Z "<<iteracje<<" iteracji wyzarzania osiagnieto Cmax = "<<Cmax<<" w czasie "<< setprecision(6) << czas <<endl;
   }
-
-
 
   if(argc==1){
     cin.get();
