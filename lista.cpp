@@ -24,18 +24,6 @@ ostream & operator << (ostream &out, const vector<zadanie> &lista){
     return out;
 }
 
-bool check_r(zadanie a, zadanie b){
-return a.r<b.r;
-}
-bool check_p(zadanie a, zadanie b){
-return a.p<b.p;
-}
-bool check_q(zadanie a, zadanie b){
-return a.q<b.q;
-}
-
-
-
 uint8_t lista_zadan::Wczytaj_z_pliku(string plik){
     ifstream dane(plik);
     zadanie tmp;
@@ -98,90 +86,89 @@ void lista_zadan::pokazCmax(ostream &out){
     return;
 }
 void lista_zadan::Schrange(){
-    vector<zadanie> Nn(lista_do_posortowania);
-    vector<zadanie> Ng;
-    auto j_adr = Nn.begin();
-    uint32_t t = (min_element(Nn.begin(),Nn.end(),check_r))->r;
-    Ng.clear();
+    KolejkaP Nn(false);
+    KolejkaP Ng(true);
+    for( auto &tmp : lista_do_posortowania){
+        Nn.push(tmp);
+    }
+    zadanie j;
+    uint32_t t = Nn.peek().r;
     lista_rozwiazan.clear();
     Cmax=0;
-    while((Ng.size()!=0)||(Nn.size()!=0)){
-        while((Nn.size()!=0)&&((min_element(Nn.begin(),Nn.end(),check_r)->r)<=t)){
-            j_adr=min_element(Nn.begin(),Nn.end(),check_r);
+    while((!Ng.isEmpty())||(!Nn.isEmpty())){
+        while((!Nn.isEmpty())&&((Nn.peek().r)<=t)){
+            j=Nn.pop();
             #if SCHRANGE_DEBUG
-                cout<<"[SCHRANGE_DEBUG] Przenosze zadanie "<<(j_adr->ID)<<" do zadan gotowych"<<endl;
+                cout<<"[SCHRANGE_DEBUG] Przenosze zadanie "<<(j.ID)<<" do zadan gotowych"<<endl;
             #endif // SCHRANGE_DEBUG
-            Ng.push_back(*j_adr);
-            Nn.erase(j_adr);
+            Ng.push(j);
         }
-        if(Ng.size()==0){
-            t=(min_element(Nn.begin(),Nn.end(),check_r))->r;
+        if(Ng.isEmpty()){
+            t=Nn.peek().r;
             #if SCHRANGE_DEBUG
                 cout<<"[SCHRANGE_DEBUG] Zwiekszam czas t = "<<t<<endl;
             #endif // SCHRANGE_DEBUG
         }else{
-            j_adr=max_element(Ng.begin(),Ng.end(),check_q);
+            j=Ng.pop();
             #if SCHRANGE_DEBUG
-                cout<<"[SCHRANGE_DEBUG] Przenosze zadanie "<<(j_adr->ID)<<" do rozwiazania"<<endl;
+                cout<<"[SCHRANGE_DEBUG] Przenosze zadanie "<<(j.ID)<<" do rozwiazania"<<endl;
             #endif // SCHRANGE_DEBUG
-            lista_rozwiazan.push_back(*j_adr);
-            t+=(j_adr->p);
-            Ng.erase(j_adr);
+            lista_rozwiazan.push_back(j);
+            t+=(j.p);
         }
     }
 }
+
 uint32_t lista_zadan::Schrange_PMTN(){
-    vector<zadanie> Nn(lista_do_posortowania);
-    vector<zadanie> Ng;
-    auto j_adr = Nn.begin();
+    KolejkaP Nn(false);
+    KolejkaP Ng(true);
+    for( auto &tmp : lista_do_posortowania){
+        Nn.push(tmp);
+    }
+    zadanie j;
     Cmax = 0;
     uint32_t t = 0;
     zadanie l;
-    uint32_t q = 0xFFFFFFFF;
-    Ng.clear();
     lista_rozwiazan.clear();
-    while((Ng.size()!=0)||(Nn.size()!=0)){
-        while((Nn.size()!=0)&&((min_element(Nn.begin(),Nn.end(),check_r)->r)<=t)){
-            j_adr=min_element(Nn.begin(),Nn.end(),check_r);
+    while((!Ng.isEmpty())||(!Nn.isEmpty())){
+        while((!Nn.isEmpty())&&((Nn.peek().r)<=t)){
+            j=Nn.pop();
             #if SCHRANGE_PMTN_DEBUG
-                cout<<"[SCHRANGE_PMTN_DEBUG] Przenosze zadanie "<<(j_adr->ID)<<" do zadan gotowych"<<endl;
+                cout<<"[SCHRANGE_PMTN_DEBUG] Przenosze zadanie "<<(j.ID)<<" do zadan gotowych"<<endl;
             #endif // SCHRANGE_PMTN_DEBUG
-            Ng.push_back(*j_adr);
-            Nn.erase(j_adr);
+            Ng.push(j);
 
-            if((Ng.back().q)>(l.q)){
+            if((j.q)>(l.q)){
                 #if SCHRANGE_PMTN_DEBUG
-                    cout<<"[SCHRANGE_PMTN_DEBUG] Czas dostarczenia zad. "<<(j_adr->ID)<<" jest wiekszy niz w zad. "<<(l.ID)<<endl;
+                    cout<<"[SCHRANGE_PMTN_DEBUG] Czas dostarczenia zad. "<<(j.ID)<<" jest wiekszy niz w zad. "<<(l.ID)<<endl;
                 #endif // SCHRANGE_PMTN_DEBUG
-                l.p = t - Ng.back().r;
-                t = Ng.back().r;
+                l.p = t - j.r;
+                t = j.r;
                 if(l.p>0){
                     #if SCHRANGE_PMTN_DEBUG
                         cout<<"[SCHRANGE_PMTN_DEBUG] Wracam zadanie "<<(l.ID) <<" do kolejki gotowych"<<endl;
                     #endif // SCHRANGE_PMTN_DEBUG
-                    Ng.push_back(l);
+                    Ng.push(l);
                     lista_rozwiazan.pop_back();
                 }
             }
 
         }
-        if(Ng.size()==0){
-            t=(min_element(Nn.begin(),Nn.end(),check_r))->r;
+        if(Ng.isEmpty()){
+            t=Nn.peek().r;
             #if SCHRANGE_PMTN_DEBUG
                 cout<<"[SCHRANGE_PMTN_DEBUG] Zwiekszam czas t = "<<t<<endl;
             #endif // SCHRANGE_PMTN_DEBUG
         }else{
-            j_adr=max_element(Ng.begin(),Ng.end(),check_q);
+            j=Ng.pop();
             #if SCHRANGE_PMTN_DEBUG
-                cout<<"[SCHRANGE_PMTN_DEBUG] Dodaje zadanie "<<(j_adr->ID)<<" do Cmax"<<endl;
+                cout<<"[SCHRANGE_PMTN_DEBUG] Dodaje zadanie "<<(j.ID)<<" do Cmax"<<endl;
             #endif // SCHRANGE_PMTN_DEBUG
-            lista_rozwiazan.push_back(*j_adr); //uwaga do usuniecia
-            t+=(j_adr->p);
-            l=*j_adr;
-            if(t+(j_adr->q)>Cmax)
-                Cmax=t+(j_adr->q);
-
-            Ng.erase(j_adr);
+            lista_rozwiazan.push_back(j);
+            t+=(j.p);
+            l=j;
+            if(t+(j.q)>Cmax)
+                Cmax=t+(j.q);
         }
     }
     return 0;

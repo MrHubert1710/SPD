@@ -2,6 +2,7 @@
 #define __LISTA_HPP
 
 #include "debug.hpp"
+#include "kolejka.hpp"
 
 #ifndef OSTREAM_LISTA_DEBUG
 #define OSTREAM_LISTA_DEBUG 1
@@ -24,12 +25,7 @@
 
 using namespace std;
 
-typedef struct {
-uint16_t ID;
-int16_t r;
-int16_t p;
-int16_t q;
-} zadanie;
+
 ostream & operator << (ostream &out, const vector<zadanie> &lista);
 bool check_r(zadanie a, zadanie b);
 bool check_p(zadanie a, zadanie b);

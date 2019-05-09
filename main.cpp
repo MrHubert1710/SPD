@@ -2,6 +2,7 @@
 #include <unistd.h>
 #include <sys/time.h>
 #include "lista.hpp"
+#include "kolejka.hpp"
 using namespace std;
 
 float timedifference_msec(struct timeval t0, struct timeval t1){
@@ -14,6 +15,7 @@ int main()
     lista_zadan lista;
     struct timeval start, stop;
     double czas=0;
+
     while(true){
         cout<< "Podaj nazwe pliku: ";
         cin>>plik;
@@ -34,7 +36,6 @@ int main()
         cout<<endl;
 
 
-
         gettimeofday(&start, NULL);
         lista.Schrange_PMTN();
         gettimeofday(&stop, NULL);
@@ -46,7 +47,6 @@ int main()
         lista.policzCmax();
         lista.pokazCmax(cout<<endl);
         cout<<endl<<endl;
-
 
 
     }
