@@ -7,13 +7,13 @@
 #define OSTREAM_LISTA_DEBUG 1
 #endif // OSTREAM_LISTA_DEBUG
 
-#ifndef SCHRANGE_DEBUG
-#define SCHRANGE_DEBUG 1
-#endif // SCHRANGE_DEBUG
+#ifndef SCHRAGE_DEBUG
+#define SCHRAGE_DEBUG 1
+#endif // SCHRAGE_DEBUG
 
-#ifndef SCHRANGE_PMTN_DEBUG
-#define SCHRANGE_PMTN_DEBUG 1
-#endif // SCHRANGE_PMTN_DEBUG
+#ifndef SCHRAGE_PMTN_DEBUG
+#define SCHRAGE_PMTN_DEBUG 1
+#endif // SCHRAGE_PMTN_DEBUG
 
 #include <fstream>
 #include <vector>
@@ -30,6 +30,7 @@ int16_t r;
 int16_t p;
 int16_t q;
 } zadanie;
+
 ostream & operator << (ostream &out, const vector<zadanie> &lista);
 bool check_r(zadanie a, zadanie b);
 bool check_p(zadanie a, zadanie b);
@@ -49,8 +50,8 @@ public:
     void pokazWyjscie(ostream &out);
     void policzCmax();
     void pokazCmax(ostream &out);
-    void Schrange();
-    uint32_t Schrange_PMTN();
+    void Schrage();
+    uint32_t Schrage_PMTN();
 
 };
 

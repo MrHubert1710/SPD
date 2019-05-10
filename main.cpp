@@ -21,12 +21,12 @@ int main()
             break;
         //lista.pokazWejscie(cout);
         gettimeofday(&start, NULL);
-        lista.Schrange();
+        lista.Schrage();
         gettimeofday(&stop, NULL);
         czas = timedifference_msec(start, stop);
 
 
-        cout<<endl<<"Algorytm Schrange"<<endl<<endl<<"Czas wykonywania: "<< setprecision(6) << czas <<endl;
+        cout<<endl<<"Algorytm Schrage"<<endl<<endl<<"Czas wykonywania: "<< setprecision(6) << czas <<endl;
         //lista.pokazWyjscie(cout<<endl);
         lista.pokazCmax(cout);
         lista.policzCmax();
@@ -36,11 +36,11 @@ int main()
 
 
         gettimeofday(&start, NULL);
-        lista.Schrange_PMTN();
+        lista.Schrage_PMTN();
         gettimeofday(&stop, NULL);
         czas = timedifference_msec(start, stop);
 
-        cout<<endl<<"Algorytm Schrange z przerwaniami"<<endl<<endl<<"Czas wykonywania: "<< setprecision(6) << czas <<endl;
+        cout<<endl<<"Algorytm Schrage z przerwaniami"<<endl<<endl<<"Czas wykonywania: "<< setprecision(6) << czas <<endl;
         //lista.pokazWyjscie(cout<<endl);
         lista.pokazCmax(cout);
         lista.policzCmax();
