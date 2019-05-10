@@ -8,13 +8,13 @@
 #define OSTREAM_LISTA_DEBUG 1
 #endif // OSTREAM_LISTA_DEBUG
 
-#ifndef SCHRANGE_DEBUG
-#define SCHRANGE_DEBUG 1
-#endif // SCHRANGE_DEBUG
+#ifndef SCHRAGE_DEBUG
+#define SCHRAGE_DEBUG 1
+#endif // SCHRAGE_DEBUG
 
-#ifndef SCHRANGE_PMTN_DEBUG
-#define SCHRANGE_PMTN_DEBUG 1
-#endif // SCHRANGE_PMTN_DEBUG
+#ifndef SCHRAGE_PMTN_DEBUG
+#define SCHRAGE_PMTN_DEBUG 1
+#endif // SCHRAGE_PMTN_DEBUG
 
 #include <fstream>
 #include <vector>
@@ -45,8 +45,8 @@ public:
     void pokazWyjscie(ostream &out);
     void policzCmax();
     void pokazCmax(ostream &out);
-    void Schrange();
-    uint32_t Schrange_PMTN();
+    void Schrage();
+    uint32_t Schrage_PMTN();
 
 };
 
