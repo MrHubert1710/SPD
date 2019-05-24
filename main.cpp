@@ -21,7 +21,6 @@ int main()
         cin>>plik;
         if(lista.Wczytaj_z_pliku(plik))
             break;
-        //lista.pokazWejscie(cout);
         gettimeofday(&start, NULL);
         lista.Schrage();
         gettimeofday(&stop, NULL);
@@ -29,36 +28,16 @@ int main()
 
 
         cout<<endl<<"Algorytm Schrage"<<endl<<endl<<"Czas wykonywania: "<< setprecision(6) << czas <<endl;
-        //lista.pokazWyjscie(cout<<endl);
-        lista.pokazCmax(cout);
         lista.policzCmax();
         lista.pokazCmax(cout);
         cout<<endl;
 
-
-        //gettimeofday(&start, NULL);
-        //lista.Schrage_PMTN();
-       // gettimeofday(&stop, NULL);
-       // czas = timedifference_msec(start, stop);
-
-       // cout<<endl<<"Algorytm Schrage z przerwaniami"<<endl<<endl<<"Czas wykonywania: "<< setprecision(6) << czas <<endl;
-        //lista.pokazWyjscie(cout<<endl);
-//lista.pokazCmax(cout);
-        //lista.policzCmax();
-        //lista.pokazCmax(cout<<endl);
-        //cout<<endl<<endl;
-
-        lista.pokazWejscie(cout);
         gettimeofday(&start, NULL);
         lista.startCarlier();
         gettimeofday(&stop, NULL);
         czas = timedifference_msec(start, stop);
 
         cout<<endl<<"Algorytm Carlier"<<endl<<endl<<"Czas wykonywania: "<< setprecision(6) << czas <<endl;
-        //lista.pokazWyjscie(cout<<endl);
-        lista.pokazWyjscie(cout);
-        cout<<lista.lista_rozwiazan.size()<<endl;
-        lista.policzCmax();
         lista.pokazCmax(cout<<endl);
         cout<<endl<<endl;
 

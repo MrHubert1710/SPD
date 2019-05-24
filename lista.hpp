@@ -38,6 +38,7 @@ bool check_q(zadanie a, zadanie b);
 class lista_zadan{
 private:
     vector<zadanie> lista_do_posortowania;
+    vector<zadanie> kopia_rozwiazan;
     uint32_t Cmax;
     vector<uint32_t> S;
     vector<uint32_t> C;

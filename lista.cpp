@@ -236,7 +236,6 @@ void lista_zadan::startCarlier(){
 }
 
 void lista_zadan::Carlier(){
-    vector<zadanie> kopia_rozwiazan;
     vector<zadanie> K;
     uint32_t a,b,c;
     uint32_t tmp=-1;
@@ -296,6 +295,7 @@ void lista_zadan::Carlier(){
 
 
     if(c==0xFFFFFFFF){
+        //cout<<"Kopia:"<<endl<<kopia_rozwiazan<<endl;
         //lista_rozwiazan=lista_do_posortowania;
         //lista_rozwiazan=kopia_rozwiazan;
         return;
