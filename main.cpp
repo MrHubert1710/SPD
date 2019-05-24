@@ -1,4 +1,4 @@
-#include <iostream>
+mak#include <iostream>
 #include <unistd.h>
 #include <sys/time.h>
 #include "lista.hpp"
@@ -41,7 +41,7 @@ int main()
         lista.pokazCmax(cout<<endl);
         lista.policzCmax();
         lista.pokazCmax(cout<<endl);
-        lista.pokazWyjscie(cout);
+        lista.pokazWyjscie(cout<<endl);
         cout<<endl<<endl;
 
 
