@@ -38,6 +38,7 @@ bool check_q(zadanie a, zadanie b);
 class lista_zadan{
 private:
     vector<zadanie> lista_do_posortowania;
+    vector<zadanie> lista_rozwiazan;
     vector<zadanie> kopia_rozwiazan;
     uint32_t Cmax;
     vector<uint32_t> S;
@@ -48,12 +49,16 @@ private:
     void Carlier();
 
 public:
-    vector<zadanie> lista_rozwiazan;
+    vector<zadanie> opt_list;
+    vector<zadanie> Schrage(vector<zadanie> &src);
+    uint32_t Schrage_PMTN(vector<zadanie> &src);
+    vector<zadanie> Carlier(vector<zadanie> &src);
+    vector<zadanie> startCarlier_new();
     uint8_t  Wczytaj_z_pliku(string plik);
     void pokazWejscie(ostream &out);
     void pokazWyjscie(ostream &out);
     void policzCmax();
-    uint16_t policzCmax(vector<zadanie> &tmp);
+    uint32_t policzCmax(vector<zadanie> &tmp);
     void pokazCmax(ostream &out);
     void Schrage();
     uint32_t Schrage_PMTN();

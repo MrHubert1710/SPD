@@ -33,12 +33,15 @@ int main()
         cout<<endl;
 
         gettimeofday(&start, NULL);
-        lista.startCarlier();
+        lista.startCarlier_new();
         gettimeofday(&stop, NULL);
         czas = timedifference_msec(start, stop);
 
         cout<<endl<<"Algorytm Carlier"<<endl<<endl<<"Czas wykonywania: "<< setprecision(6) << czas <<endl;
         lista.pokazCmax(cout<<endl);
+        lista.policzCmax();
+        lista.pokazCmax(cout<<endl);
+        lista.pokazWyjscie(cout);
         cout<<endl<<endl;
 
 

@@ -8,7 +8,7 @@
 #define CARLIER_DEBUG 0
 
 typedef struct {
-uint16_t ID;
+uint32_t ID;
 int16_t r;
 int16_t p;
 int16_t q;

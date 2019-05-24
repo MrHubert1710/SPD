@@ -3,7 +3,7 @@
 ostream & operator << (ostream &out, const vector<zadanie> &lista){
 
     #if !OSTREAM_LISTA_DEBUG
-    uint16_t item=0;
+    uint32_t item=0;
     #endif // !OSTREAM_LISTA_DEBUG
     for(auto &tmp : lista){
     #if OSTREAM_LISTA_DEBUG
@@ -35,8 +35,8 @@ bool check_q(zadanie a, zadanie b){
 uint8_t lista_zadan::Wczytaj_z_pliku(string plik){
     ifstream dane(plik);
     zadanie tmp;
-    uint16_t k;
-    uint16_t w;
+    uint32_t k;
+    uint32_t w;
     lista_do_posortowania.clear();
     //Check  ////////
     if((dane.rdstate() & ifstream::failbit)!=0){
@@ -127,6 +127,92 @@ void lista_zadan::Schrage(){
     }
 }
 
+vector<zadanie> lista_zadan::Schrage(vector<zadanie> &src){
+    KolejkaP Nn(false);
+    KolejkaP Ng(true);
+    vector<zadanie> rvalue;
+    for( auto &tmp : src){
+        Nn.push(tmp);
+    }
+    zadanie j;
+    uint32_t t = Nn.peek().r;
+    while((!Ng.isEmpty())||(!Nn.isEmpty())){
+        while((!Nn.isEmpty())&&((Nn.peek().r)<=t)){
+            j=Nn.pop();
+            #if SCHRAGE_DEBUG
+                cout<<"[SCHRAGE_DEBUG] Przenosze zadanie "<<(j.ID)<<" do zadan gotowych"<<endl;
+            #endif // SCHRAGE_DEBUG
+            Ng.push(j);
+        }
+        if(Ng.isEmpty()){
+            t=Nn.peek().r;
+            #if SCHRAGE_DEBUG
+                cout<<"[SCHRAGE_DEBUG] Zwiekszam czas t = "<<t<<endl;
+            #endif // SCHRAGE_DEBUG
+        }else{
+            j=Ng.pop();
+            #if SCHRAGE_DEBUG
+                cout<<"[SCHRAGE_DEBUG] Przenosze zadanie "<<(j.ID)<<" do rozwiazania"<<endl;
+            #endif // SCHRAGE_DEBUG
+            rvalue.push_back(j);
+            t+=(j.p);
+        }
+    }
+    return rvalue;
+}
+uint32_t lista_zadan::Schrage_PMTN(vector<zadanie> &src){
+    KolejkaP Nn(false);
+    KolejkaP Ng(true);
+    for( auto &tmp : src){
+        Nn.push(tmp);
+    }
+    zadanie j;
+    uint32_t rvalue = 0;
+    uint32_t t = 0;
+    zadanie l;
+    while((!Ng.isEmpty())||(!Nn.isEmpty())){
+        while((!Nn.isEmpty())&&((Nn.peek().r)<=t)){
+            j=Nn.pop();
+            #if SCHRAGE_PMTN_DEBUG
+                cout<<"[SCHRAGE_PMTN_DEBUG] Przenosze zadanie "<<(j.ID)<<" do zadan gotowych"<<endl;
+            #endif // SCHRAGE_PMTN_DEBUG
+            Ng.push(j);
+
+            if((j.q)>(l.q)){
+                #if SCHRAGE_PMTN_DEBUG
+                    cout<<"[SCHRAGE_PMTN_DEBUG] Czas dostarczenia zad. "<<(j.ID)<<" jest wiekszy niz w zad. "<<(l.ID)<<endl;
+                #endif // SCHRAGE_PMTN_DEBUG
+                l.p = t - j.r;
+                t = j.r;
+                if(l.p>0){
+                    #if SCHRAGE_PMTN_DEBUG
+                        cout<<"[SCHRAGE_PMTN_DEBUG] Wracam zadanie "<<(l.ID) <<" do kolejki gotowych"<<endl;
+                    #endif // SCHRAGE_PMTN_DEBUG
+                    Ng.push(l);
+                }
+            }
+
+        }
+        if(Ng.isEmpty()){
+            t=Nn.peek().r;
+            #if SCHRAGE_PMTN_DEBUG
+                cout<<"[SCHRAGE_PMTN_DEBUG] Zwiekszam czas t = "<<t<<endl;
+            #endif // SCHRAGE_PMTN_DEBUG
+        }else{
+            j=Ng.pop();
+            #if SCHRAGE_PMTN_DEBUG
+                cout<<"[SCHRAGE_PMTN_DEBUG] Dodaje zadanie "<<(j.ID)<<" do Cmax"<<endl;
+            #endif // SCHRAGE_PMTN_DEBUG
+            t+=(j.p);
+            l=j;
+            if(t+(j.q)>rvalue)
+                rvalue=t+(j.q);
+        }
+    }
+    return rvalue;
+}
+
+
 uint32_t lista_zadan::Schrage_PMTN(){
     KolejkaP Nn(false);
     KolejkaP Ng(true);
@@ -188,7 +274,7 @@ void lista_zadan::policzCmax(){
         return;
     }
 
-    for(uint16_t i = 0; i<lista_rozwiazan.size(); ++i){
+    for(uint32_t i = 0; i<lista_rozwiazan.size(); ++i){
         if(i==0){
             S.push_back(lista_rozwiazan[i].r);
         }else{
@@ -203,7 +289,7 @@ void lista_zadan::policzCmax(){
     Cmax = *max_element(C.begin(),C.end());
 }
 
-uint16_t lista_zadan::policzCmax(vector<zadanie> &tmp){
+uint32_t lista_zadan::policzCmax(vector<zadanie> &tmp){
 
     vector<uint32_t> St;
     vector<uint32_t> Ct;
@@ -213,7 +299,7 @@ uint16_t lista_zadan::policzCmax(vector<zadanie> &tmp){
         return 0;
     }
 
-    for(uint16_t i = 0; i<tmp.size(); ++i){
+    for(uint32_t i = 0; i<tmp.size(); ++i){
         if(i==0){
             St.push_back(tmp[i].r);
         }else{
@@ -225,6 +311,10 @@ uint16_t lista_zadan::policzCmax(vector<zadanie> &tmp){
         }
         Ct.push_back(St.back()+tmp[i].p+tmp[i].q);
     }
+    C.clear();
+    S.clear();
+    C=Ct;
+    S=St;
     return *max_element(Ct.begin(),Ct.end());
 }
 void lista_zadan::startCarlier(){
@@ -232,11 +322,155 @@ void lista_zadan::startCarlier(){
     LB=0;
     UB=0xFFFFFFFF;
     Carlier();
+}
+vector<zadanie> lista_zadan::startCarlier_new(){
+    U=0;
+    LB=0;
+    UB=0xFFFFFFFF;
+    lista_rozwiazan.clear();
+    lista_rozwiazan = Carlier(lista_do_posortowania);
+    return lista_rozwiazan;
+}
+vector<zadanie> lista_zadan::Carlier(vector<zadanie> &src){
+    vector<zadanie> K;
+    vector<zadanie> present_list;
+    uint32_t a,b,c;
+    uint32_t br,bq;
+    uint32_t tmp=-1;
 
+    present_list=Schrage(src);
+    U=policzCmax(present_list);
+    if(U<UB){
+        UB=U;
+        opt_list=present_list;
+        #if CARLIER_DEBUG
+            cout<<"[CARLIER_DEBUG] zmieniam UB na: "<<U<<endl;
+        #endif // CARLIER_DEBUG
+    }
+
+    //B
+    b=0xFFFFFFFF;
+    for(int j=present_list.size()-1;j>=0;--j){
+        if(U == C[j]){
+            b=j;
+            break;
+        }
+    }
+    #if CARLIER_DEBUG
+        cout<<"[CARLIER_DEBUG] Znalezione b = "<<b<<endl;
+    #endif // CARLIER_DEBUG
+    //A
+    a=0xFFFFFFFF;
+    if(b!=0xFFFFFFFF){
+    for(int j=0; j<present_list.size(); ++j){
+        tmp=0;
+        for(int s=j; s<=b; ++s){
+            tmp+=present_list[s].p;
+        }
+        if(U==(present_list[j].r+tmp+present_list[b].q)){
+            a=j;
+            break;
+        }
+    }
+    }
+    #if CARLIER_DEBUG
+        cout<<"[CARLIER_DEBUG] Znalezione a = "<<a<<endl;
+    #endif // CARLIER_DEBUG
+    //C
+    c=0xFFFFFFFF;
+    if(a!=0xFFFFFFFF && b!=0xFFFFFFFF){
+    for(int j=b;j>=a;--j){
+        if(present_list[j].q < present_list[b].q){
+            c=j;
+            break;
+        }
+    }
+    }
+    #if CARLIER_DEBUG
+        cout<<"[CARLIER_DEBUG] Znalezione c = "<<c<<endl;
+    #endif // CARLIER_DEBUG
+
+
+
+    if(c==0xFFFFFFFF){
+        return opt_list;
+    }
+
+    for(int j=c+1;j<=b;++j){
+        K.push_back(present_list[j]);
+    }
+
+    uint32_t rk = min_element(K.begin(),K.end(),check_r)->r;
+    uint32_t qk = min_element(K.begin(),K.end(),check_q)->q;
+    uint32_t pk=0;
+    for(int j = 0; j<K.size(); ++j){
+        pk+=K[j].p;
+    }
+    //R
+    br=present_list[c].r;
+    if(present_list[c].r<rk+pk)
+        present_list[c].r = rk+pk;
+
+    LB = Schrage_PMTN(present_list);
+    if(rk+pk+qk>LB){
+        LB=rk+pk+qk;
+    }
+    K.insert(K.begin(),present_list[c]);
+    rk = min_element(K.begin(),K.end(),check_r)->r;
+    qk = min_element(K.begin(),K.end(),check_q)->q;
+    pk=0;
+    for(int j = 0; j<K.size(); ++j){
+        pk+=K[j].p;
+    }
+
+    if(rk+pk+qk>LB){
+        LB=rk+pk+qk;
+    }
+    K.erase(K.begin());
+    rk = min_element(K.begin(),K.end(),check_r)->r;
+    qk = min_element(K.begin(),K.end(),check_q)->q;
+    pk=0;
+    for(int j = 0; j<K.size(); ++j){
+        pk+=K[j].p;
+    }
+
+
+    if(LB<UB){
+
+        Carlier(present_list);
+
+    }
+    present_list[c].r=br;
+
+    //Q
+    bq=present_list[c].q;
+    if(present_list[c].q<qk+pk)
+        present_list[c].q = qk+pk;
+    LB = Schrage_PMTN(present_list);
+    if(rk+pk+qk>LB){
+        LB=rk+pk+qk;
+    }
+    K.insert(K.begin(),present_list[c]);
+    rk = min_element(K.begin(),K.end(),check_r)->r;
+    qk = min_element(K.begin(),K.end(),check_q)->q;
+    pk=0;
+    for(int j = 0; j<K.size(); ++j){
+        pk+=K[j].p;
+    }
+    if(rk+pk+qk>LB){
+        LB=rk+pk+qk;
+    }
+    K.erase(K.begin());
+    if(LB<UB){
+        Carlier(present_list);
+    }
+    present_list[c].q=bq;
+    return opt_list;
 }
 
 void lista_zadan::Carlier(){
     vector<zadanie> K;
+    vector<zadanie> tmp_list;
     uint32_t a,b,c;
     uint32_t tmp=-1;
 
@@ -311,7 +545,7 @@ void lista_zadan::Carlier(){
     for(int j = 0; j<K.size(); ++j){
         pk+=K[j].p;
     }
-
+    tmp_list=lista_do_posortowania;
     //R
 
     if(lista_do_posortowania[c].r<rk+pk)
@@ -342,9 +576,11 @@ void lista_zadan::Carlier(){
 
 
     if(LB<UB){
+
         Carlier();
+
     }
-    lista_do_posortowania[c].r = kopia_rozwiazan[c].r;
+    lista_do_posortowania = tmp_list;
 
     //Q
     if(lista_do_posortowania[c].q<qk+pk)
@@ -367,5 +603,5 @@ void lista_zadan::Carlier(){
     if(LB<UB){
         Carlier();
     }
-    lista_do_posortowania[c].q = kopia_rozwiazan[c].q;
+    lista_do_posortowania = tmp_list;
 }
