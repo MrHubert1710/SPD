@@ -1,0 +1,1 @@
+for /l %%A in (0 1 120) do type nul > %%A
